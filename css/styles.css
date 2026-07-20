@@ -1,0 +1,353 @@
+/* ============================================================
+   Deezer-Manager — Design tokens
+   Signature: album art rendered as a spinning vinyl disc on
+   hover/playback — every album is literally a record.
+   ============================================================ */
+
+:root{
+  --bg:            #f7f4ee;
+  --surface:       #ffffff;
+  --surface-2:     #efeae0;
+  --text:          #17161c;
+  --text-dim:      #6b6860;
+  --border:        rgba(23,22,28,0.10);
+  --accent:        #e63950;   /* raspberry-red, the label color */
+  --accent-ink:    #ffffff;
+  --gold:          #c98a1c;   /* stars */
+  --ok:            #2f8f5b;
+  --shadow:        0 10px 30px rgba(23,22,28,0.10);
+  --radius:        14px;
+  --radius-sm:     8px;
+  --font-display:  'Bricolage Grotesque', 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-body:     'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono:     'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+}
+
+[data-theme="dark"]{
+  --bg:            #100f14;
+  --surface:       #1a1922;
+  --surface-2:     #221f2c;
+  --text:          #f3f1ea;
+  --text-dim:      #a29d95;
+  --border:        rgba(243,241,234,0.10);
+  --accent:        #ff5169;
+  --accent-ink:    #100f14;
+  --gold:          #ffc857;
+  --ok:            #4fd18e;
+  --shadow:        0 10px 34px rgba(0,0,0,0.45);
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  transition:background .25s ease, color .25s ease;
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,.brand{ font-family:var(--font-display); letter-spacing:-0.01em; margin:0; }
+
+a{ color:inherit; }
+
+button{
+  font-family:var(--font-body);
+  cursor:pointer;
+  border:none;
+  background:none;
+  color:inherit;
+}
+button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+
+input, select{
+  font-family:var(--font-body);
+  background:var(--surface-2);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:10px 12px;
+}
+
+/* ---------- layout shells ---------- */
+.screen{ min-height:100vh; display:flex; flex-direction:column; }
+.container{ width:100%; max-width:1080px; margin:0 auto; padding:0 20px; }
+
+/* ---------- login screen ---------- */
+.login-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: 
+    radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 45%),
+    var(--bg); 
+  transition: background .30s ease; 
+}
+
+html[data-theme="dark"] .login-screen {
+  background: 
+    radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 45%),
+    #100f14 !important;
+}
+
+.login-card{
+  width:min(380px, 92vw);
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:36px 32px;
+}
+.brand-mark{
+  display:flex; align-items:center; gap:10px; margin-bottom:28px;
+}
+.brand-mark .disc,
+.topbar .brand .disc {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, var(--bg) 0 14%, transparent 15%),
+    conic-gradient(from 0deg, var(--accent), var(--gold), var(--accent));
+  flex: none;
+}
+
+.brand-mark .disc {
+  width: 34px;
+  height: 34px;
+}
+
+.topbar .brand .disc {
+  width: 22px;
+  height: 22px;
+}
+
+.brand{ font-size:1.15rem; }
+.brand small{ display:block; font-family:var(--font-body); font-weight:400; color:var(--text-dim); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; }
+
+.field{ margin-bottom:16px; display:flex; flex-direction:column; gap:6px; }
+.field label{ font-size:.78rem; color:var(--text-dim); }
+.field input{ width:100%; }
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:11px 18px; border-radius:var(--radius-sm);
+  font-weight:600; font-size:.92rem;
+  transition:transform .12s ease, opacity .12s ease;
+}
+.btn:active{ transform:scale(.97); }
+.btn-primary{ background:var(--accent); color:var(--accent-ink); width:100%; }
+.btn-primary[disabled]{ opacity:.65; cursor:default; }
+.btn-ghost{ background:var(--surface-2); color:var(--text); border:1px solid var(--border); }
+
+.form-error{ color:var(--accent); font-size:.82rem; min-height:1.1em; margin-top:2px; }
+.hint{ margin-top:18px; font-size:.78rem; color:var(--text-dim); text-align:center; }
+
+/* spinner */
+.spinner{
+  width:16px; height:16px; border-radius:50%;
+  border:2px solid color-mix(in srgb, var(--accent-ink) 35%, transparent);
+  border-top-color:var(--accent-ink);
+  animation:spin .7s linear infinite;
+}
+.spinner-lg{
+  width:40px; height:40px; border-width:3px;
+  border-color:color-mix(in srgb, var(--accent) 25%, transparent);
+  border-top-color:var(--accent);
+  margin:30px auto;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* ---------- app shell / top bar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:20;
+  background:color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.topbar-inner{
+  display:flex; align-items:center; gap:18px; padding:14px 0;
+}
+.topbar .brand{ font-size:1rem; display:flex; align-items:center; gap:8px; flex:none; }
+.topbar .brand .disc{ width:22px; height:22px; }
+
+.nav-tabs{ display:flex; gap:4px; }
+.nav-tab{
+  padding:8px 14px; border-radius:999px; font-size:.86rem; font-weight:600; color:var(--text-dim);
+}
+.nav-tab.active{ background:var(--surface-2); color:var(--text); }
+
+.topbar-actions{ margin-left:auto; display:flex; align-items:center; gap:8px; }
+.icon-btn{
+  width:38px; height:38px; border-radius:50%; display:grid; place-items:center;
+  background:var(--surface-2); border:1px solid var(--border); font-size:1rem;
+}
+
+/* ---------- search ---------- */
+.search-row{ display:flex; gap:10px; margin:26px 0 8px; }
+.search-row input{ flex:1; font-size:1rem; padding:13px 16px; }
+
+.state-panel{
+  text-align:center; padding:60px 20px; color:var(--text-dim);
+}
+.state-panel .glyph{ font-size:2rem; margin-bottom:10px; display:block; }
+.state-panel h3{ color:var(--text); font-size:1.05rem; margin-bottom:6px; }
+
+.artist-grid{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr));
+  gap:16px; margin:22px 0 40px;
+}
+.artist-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:14px; text-align:center; transition:transform .15s ease, border-color .15s ease;
+}
+.artist-card:hover{ transform:translateY(-3px); border-color:var(--accent); }
+.artist-card img{ width:100%; aspect-ratio:1; object-fit:cover; border-radius:50%; margin-bottom:10px; }
+.artist-card .name{ font-weight:600; font-size:.92rem; }
+.artist-card .sub{ font-size:.74rem; color:var(--text-dim); }
+
+/* ---------- artist detail ---------- */
+.artist-header{
+  display:flex; gap:22px; align-items:center; padding:32px 0 8px; flex-wrap:wrap;
+}
+.artist-header img{ width:120px; height:120px; border-radius:50%; object-fit:cover; box-shadow:var(--shadow); }
+.artist-header h1{ font-size:1.7rem; }
+.artist-header .sub{ color:var(--text-dim); font-size:.9rem; margin-top:4px; }
+.back-link{ font-size:.85rem; color:var(--text-dim); display:inline-flex; align-items:center; gap:6px; margin-top:24px; }
+.back-link:hover{ color:var(--accent); }
+
+.album-list{ display:flex; flex-direction:column; gap:10px; margin:24px 0 50px; }
+.album-row{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  overflow:hidden;
+}
+.album-row-top{ display:flex; align-items:center; gap:14px; padding:12px 16px; cursor:pointer; }
+.album-cover-wrap{ position:relative; width:56px; height:56px; flex:none; }
+.album-cover{
+  width:56px; height:56px; border-radius:50%; object-fit:cover;
+  transition:transform .4s linear;
+  border:2px solid var(--surface-2);
+}
+.album-row.playing .album-cover{ animation:spin-disc 3s linear infinite; }
+@keyframes spin-disc{ to{ transform:rotate(360deg); } }
+.album-cover-wrap::after{
+  content:''; position:absolute; inset:0; margin:auto; width:8px; height:8px;
+  border-radius:50%; background:var(--bg); pointer-events:none;
+}
+.album-meta{ flex:1; min-width:0; }
+.album-title{ font-weight:600; font-size:.95rem; }
+.album-sub{ font-size:.78rem; color:var(--text-dim); }
+.album-actions{ display:flex; align-items:center; gap:8px; }
+.chevron{ transition:transform .2s ease; color:var(--text-dim); }
+.album-row.expanded .chevron{ transform:rotate(90deg); }
+
+.fav-btn{ font-size:1.2rem; line-height:1; color:var(--text-dim); }
+.fav-btn.active{ color:var(--accent); }
+
+.track-list{ border-top:1px solid var(--border); }
+.track-row{
+  display:flex; align-items:center; gap:12px; padding:10px 16px 10px 70px;
+  font-size:.87rem;
+}
+.track-row:nth-child(even){ background:color-mix(in srgb, var(--surface-2) 55%, transparent); }
+.track-num{ color:var(--text-dim); width:20px; flex:none; }
+.track-name{ flex:1; }
+.track-duration{ color:var(--text-dim); font-size:.78rem; }
+.play-btn{
+  width:30px; height:30px; border-radius:50%; background:var(--surface-2);
+  display:grid; place-items:center; flex:none; font-size:.8rem;
+}
+.play-btn.is-playing{ background:var(--accent); color:var(--accent-ink); }
+
+.stars{ display:flex; gap:2px; }
+.star{ font-size:1.05rem; color:var(--border); }
+.star.filled{ color:var(--gold); }
+.stars.interactive .star{ cursor:pointer; }
+
+/* ---------- favorites ---------- */
+.fav-toolbar{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin:26px 0 6px; flex-wrap:wrap; }
+.fav-toolbar select{ font-size:.85rem; }
+.fav-count{ font-size:.85rem; color:var(--text-dim); }
+
+.fav-grid{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(190px,1fr));
+  gap:16px; margin:20px 0 50px;
+}
+.fav-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:14px; display:flex; flex-direction:column; gap:8px;
+}
+.fav-card img{ width:100%; aspect-ratio:1; object-fit:cover; border-radius:var(--radius-sm); }
+.fav-card .title{ font-weight:600; font-size:.92rem; }
+.fav-card .artist-name{ font-size:.78rem; color:var(--text-dim); }
+.fav-card .row-between{ display:flex; align-items:center; justify-content:space-between; }
+.remove-link{ font-size:.76rem; color:var(--text-dim); }
+.remove-link:hover{ color:var(--accent); }
+
+/* ---------- offline banner ---------- */
+.offline-banner{
+  display:none; align-items:center; gap:10px; justify-content:center;
+  background:var(--gold); color:#1c1608; font-size:.83rem; font-weight:600;
+  padding:8px 12px;
+}
+body.is-offline .offline-banner{ display:flex; }
+
+/* ---------- footer / misc ---------- */
+.section-title{ font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--text-dim); margin:0 0 4px; }
+.visually-hidden{ position:absolute; width:1px;height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+@media (max-width:640px){
+  .artist-header{ flex-direction:column; text-align:center; }
+  .nav-tabs{ order:3; width:100%; justify-content:center; }
+  .topbar-inner{ flex-wrap:wrap; }
+}
+
+/* ---------- favorites ---------- */
+.fav-card .track-row {
+  padding: 8px 10px; /
+}
+
+.fav-card .track-num {
+  width: 14px; */
+}
+
+.fav-card .track-name {
+  font-size: 0.8rem;       
+  white-space: nowrap;     
+  overflow: hidden;        
+  text-overflow: ellipsis; 
+}
+
+.fav-card .play-btn {
+  width: 26px;  
+  height: 26px;
+  font-size: 0.7rem;
+}
+
+.fav-grid {
+  align-items: start;
+}
+
+.fav-card .album-cover {
+  width: 100%;                  
+  aspect-ratio: 1 / 1;          
+  object-fit: cover;            
+  border-radius: var(--radius-sm); 
+  
+  transition: border-radius 0.5s ease; 
+}
+
+.fav-card.playing .album-cover {
+  border-radius: 50%;                      
+  animation: spin-disc 3s linear infinite;  
+}
+
+.fav-grid .fav-card .album-cover {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+  display: block !important;
+}

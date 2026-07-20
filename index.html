@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deezer-Manager — Bienvenida</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="login-screen">
+  <div class="login-card">
+    <div class="brand-mark">
+      <span class="disc" aria-hidden="true"></span>
+      <span class="brand">Deezer-Manager<small>Gestión musical personal</small></span>
+      <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema" style="margin-left: auto; width: 32px; height: 32px; font-size: 0.85rem;">🌙</button>
+    </div>
+
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label for="username">Usuario</label>
+        <input id="username" name="username" type="text" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <p class="form-error" id="login-error" role="alert"></p>
+      <button type="submit" class="btn btn-primary" id="login-btn">Iniciar sesión</button>
+    </form>
+
+    <p class="hint">¿No tienes cuenta? <a href="#" id="show-register">Regístrate aquí</a></p>
+  </div>
+</div>
+
+<!-- Modal simple de registro -->
+<dialog id="register-dialog" style="border:none; border-radius:14px; padding:0; background:transparent;">
+  <div class="login-card" style="width:min(360px,88vw);">
+    <div class="brand-mark"><span class="brand">Crear cuenta</span></div>
+    <form id="register-form" novalidate>
+      <div class="field">
+        <label for="reg-username">Usuario</label>
+        <input id="reg-username" type="text" required>
+      </div>
+      <div class="field">
+        <label for="reg-password">Contraseña</label>
+        <input id="reg-password" type="password" required>
+      </div>
+      <p class="form-error" id="register-error" role="alert"></p>
+      <button type="submit" class="btn btn-primary" id="register-btn">Crear cuenta</button>
+      <button type="button" class="btn btn-ghost" id="cancel-register" style="width:100%; margin-top:8px;">Cancelar</button>
+    </form>
+  </div>
+</dialog>
+
+<script src="js/storage.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/auth.js"></script>
+<script>
+
+  // Si ya hay sesión activa, saltamos directo a la app.
+  if(Auth.isLoggedIn()){ window.location.href = 'app.html'; }
+
+  const loginForm   = document.getElementById('login-form');
+  const loginBtn    = document.getElementById('login-btn');
+  const loginError  = document.getElementById('login-error');
+
+  if (typeof Theme !== 'undefined') {
+    Theme.init(); 
+  }
+
+  loginForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    loginError.textContent = '';
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Validando…';
+
+    try{
+      await Auth.login(username, password);
+      window.location.href = 'app.html';
+    }catch(err){
+      loginError.textContent = err.message;
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Iniciar sesión';
+    }
+  });
+
+  const dialog = document.getElementById('register-dialog');
+  document.getElementById('show-register').addEventListener('click', (e)=>{
+    e.preventDefault();
+    dialog.showModal();
+  });
+  document.getElementById('cancel-register').addEventListener('click', ()=> dialog.close());
+
+  const registerForm  = document.getElementById('register-form');
+  const registerBtn   = document.getElementById('register-btn');
+  const registerError = document.getElementById('register-error');
+
+  registerForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    registerError.textContent = '';
+    const username = document.getElementById('reg-username').value.trim();
+    const password = document.getElementById('reg-password').value;
+
+    registerBtn.disabled = true;
+    registerBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Creando…';
+
+    try{
+      await Auth.register(username, password);
+      dialog.close();
+      document.getElementById('username').value = username;
+      document.getElementById('password').focus();
+    }catch(err){
+      registerError.textContent = err.message;
+    }finally{
+      registerBtn.disabled = false;
+      registerBtn.textContent = 'Crear cuenta';
+    }
+  });
+</script>
+</body>
+</html>
